@@ -1,18 +1,18 @@
 pipeline {
-  agent { label 'linux' }
+  agent { label 'master' }
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   environment {
-    HEROKU_API_KEY = credentials('darinpope-heroku-api-key')
+    HEROKU_API_KEY = credentials('heroku-api-key')
   }
   parameters { 
-    string(name: 'APP_NAME', defaultValue: '', description: 'What is the Heroku app name?') 
+    string(name: 'java-web-app-14566', defaultValue: '', description: 'What is the Heroku app name?') 
   }
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t darinpope/java-web-app:latest .'
+        sh 'docker build -t sarath/java-web-app-14566:latest .'
       }
     }
     stage('Login') {
@@ -23,7 +23,7 @@ pipeline {
     stage('Push to Heroku registry') {
       steps {
         sh '''
-          docker tag darinpope/java-web-app:latest registry.heroku.com/$APP_NAME/web
+          docker tag sarath/java-web-app:latest registry.heroku.com/$APP_NAME/web
           docker push registry.heroku.com/$APP_NAME/web
         '''
       }
